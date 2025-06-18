@@ -62,11 +62,14 @@ export default function Sidebar() {
                 {/* Header Menu */}
                 <div className="flex items-center justify-between">
                     <h2 className="text-lg font-semibold">Menu</h2>
-                    <button className='cursor-pointer' onClick={() => setOpen(true)}>
-                        <Plus className="w-5 h-5 text-blue-500 hover:text-blue-600" />
+                    <button
+                        onClick={() => setOpen(true)}
+                        className="flex items-center gap-1 px-3 py-1 text-sm text-white bg-blue-500 rounded-md hover:bg-blue-600 cursor-pointer"
+                    >
+                        <Plus className="w-4 h-4" />
+                        Create Project
                     </button>
                 </div>
-
                 {/* Dashboard */}
                 <nav className="space-y-2">
                     <Link
@@ -131,9 +134,9 @@ export default function Sidebar() {
                             disabled={loading}
                         />
                         <div className="flex justify-end">
-                        <Button onClick={handleSubmit} disabled={loading || !projectName.trim()} variant='blue' className='cursor-pointer'>
-                            {loading ? 'Menyimpan...' : 'Simpan'}
-                        </Button>
+                            <Button onClick={handleSubmit} disabled={loading || !projectName.trim()} variant='blue' className='cursor-pointer'>
+                                {loading ? 'Menyimpan...' : 'Simpan'}
+                            </Button>
                         </div>
                     </div>
                 </DialogContent>

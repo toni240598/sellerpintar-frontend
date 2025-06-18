@@ -63,7 +63,7 @@ export function AddTaskDialog({ projectId, userId, ownerId, onTaskAdded }: AddTa
                     className='cursor-pointer'
                     disabled={ownerId !== userId}
                 >
-                    <Plus className="mr-2 h-4 w-4" />
+                    <Plus className="h-4 w-4" />
                     Tambah Task
                 </Button>
             </DialogTrigger>

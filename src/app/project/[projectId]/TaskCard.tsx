@@ -17,7 +17,7 @@ export default function TaskCard({ task }: { task: Task }) {
     return (
         <div ref={setNodeRef} {...attributes} {...listeners} style={style}>
             <Card className={cn('cursor-move')}>
-                <CardHeader className="pb-2">
+                <CardHeader>
                     <CardTitle className="text-base">{task.title}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">

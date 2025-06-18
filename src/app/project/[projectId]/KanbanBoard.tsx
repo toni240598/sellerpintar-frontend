@@ -1,26 +1,26 @@
 'use client'
 
+import { Button } from '@/components/ui/button'
+import axios from '@/lib/axios'
+import { handleApiError } from '@/lib/utils'
 import {
-    DndContext,
     closestCorners,
+    DndContext,
+    DragEndEvent,
     PointerSensor,
     useSensor,
     useSensors,
-    DragEndEvent,
 } from '@dnd-kit/core'
 import {
-    arrayMove,
     rectSortingStrategy,
-    SortableContext,
+    SortableContext
 } from '@dnd-kit/sortable'
-import { useEffect, useState } from 'react'
-import Column from './Column'
-import { Button } from '@/components/ui/button'
-import { Plus } from 'lucide-react'
-import { handleApiError } from '@/lib/utils'
-import axios from '@/lib/axios'
 import Cookies from 'js-cookie'
+import { Plus } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
+import Column from './Column'
+import { AddTaskDialog } from './AddTaskDialog'
 const columns = ['todo', 'in_progress', 'done'] as const
 
 type Status = (typeof columns)[number]
@@ -36,9 +36,9 @@ export interface Task {
 
 export default function KanbanBoard({ projectId, ownerId }: { projectId: string, ownerId: string }) {
     const [tasks, setTasks] = useState<Task[]>([]);
-    const [loading, setLoading] = useState(true);
     const sensors = useSensors(useSensor(PointerSensor));
-    const userId = Cookies.get('userId');
+    const userId = Cookies.get('userId') as string;
+
 
     const fetchTasks = async () => {
         try {
@@ -46,8 +46,6 @@ export default function KanbanBoard({ projectId, ownerId }: { projectId: string,
             setTasks(data.data);
         } catch (err) {
             handleApiError(err)
-        } finally {
-            setLoading(false);
         }
     };
 
@@ -55,7 +53,7 @@ export default function KanbanBoard({ projectId, ownerId }: { projectId: string,
         fetchTasks();
     }, [projectId]);
 
-    
+
     const editStatusTask = async (taskId: string, status: Status) => {
         try {
             await axios.put(`/task/${taskId}/status`, { status });
@@ -105,10 +103,12 @@ export default function KanbanBoard({ projectId, ownerId }: { projectId: string,
             <div className="p-6">
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-bold tracking-tight">Task Board</h2>
-                    <Button onClick={() => {/* Fungsi untuk menambahkan task */ }} variant='blue' className='cursor-pointer' disabled={ownerId !== userId}>
-                        <Plus className="mr-2 h-4 w-4" />
-                        Tambah Task
-                    </Button>
+                    <AddTaskDialog
+                        projectId={projectId}
+                        userId={userId}
+                        ownerId={ownerId}
+                        onTaskAdded={() => fetchTasks()}
+                    />
                 </div>
 
                 <DndContext sensors={sensors} collisionDetection={closestCorners} onDragEnd={handleDragEnd}>
